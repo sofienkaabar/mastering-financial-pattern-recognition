@@ -1,0 +1,57 @@
+
+# Choosing the asset
+pair = 0
+
+# Time Frame
+horizon = 'H1'
+
+# Importing the asset as an array
+my_data = mass_import(pair, horizon)
+
+my_data = heikin_ashi(my_data, 0, 1, 2, 3, 4)
+
+# Creating the signal function
+def signal(data, open_column, close_column, buy_column, sell_column):
+
+    data = add_column(data, 5)  
+    
+    data = rounding(data, 4) # Put 0 instead of 4 as of pair 4
+    
+    for i in range(len(data)):  
+        
+       try:
+           
+           # Bullish pattern
+           if data[i, open_column] > data[i, close_column] and \
+              data[i - 1, open_column] > data[i - 1, close_column] and \
+              data[i - 2, open_column] > data[i - 2, close_column] and \
+              data[i, close_column] < data[i - 1, close_column] and \
+              data[i - 1, close_column] < data[i - 2, close_column] and \
+              (data[i, open_column] - data[i, close_column]) > (data[i - 1, open_column] - data[i - 1, close_column]) and \
+              (data[i - 1, open_column] - data[i - 1, close_column]) > (data[i - 2, open_column] - data[i - 2, close_column]): 
+                  
+                    data[i + 1, buy_column] = 1 
+                    
+           # Bearish pattern
+           elif data[i, open_column] < data[i, close_column] and \
+                data[i - 1, open_column] < data[i - 1, close_column] and \
+                data[i - 2, open_column] < data[i - 2, close_column] and \
+                data[i, close_column] > data[i - 1, close_column] and \
+                data[i - 1, close_column] > data[i - 2, close_column] and \
+                (data[i, open_column] - data[i, close_column]) > (data[i - 1, open_column] - data[i - 1, close_column]) and \
+                (data[i - 1, open_column] - data[i - 1, close_column]) > (data[i - 2, open_column] - data[i - 2, close_column]):
+                 
+                    data[i + 1, sell_column] = -1 
+                    
+       except IndexError:
+            
+            pass
+        
+    return data
+
+my_data = signal(my_data, 4, 7, 8, 9)
+
+k_candlestick_double_plot(my_data, 8, 9, window = 200)
+
+# Performance
+my_data = performance(my_data, 0, 8, 9, 10, 11, 12)
