@@ -36,7 +36,7 @@ def signal(data, open_column, high_column, low_column, close_column, atr_column,
               data[i, close_column] < data[i - 1, close_column] and \
               data[i - 1, close_column] < data[i - 1, open_column] and \
               data[i, high_column] - data[i, low_column] > (2 * data[i - 1, atr_column]) and \
-              data[i, close_column] - data[i, open_column] > data[i - 1, close_column] - data[i - 1, open_column] and \
+              data[i, open_column] - data[i, close_column] > data[i - 1, open_column] - data[i - 1, close_column] and \
               data[i, sell_column] == 0:
                   
                     data[i + 1, sell_column] = -1 
