@@ -1,3 +1,8 @@
+# IMPORTANT: MUST EXECUTE THIS FILE AS A WHOLE 
+# SO THAT THE REST OF THE CODE WORKS PROPERLY
+
+
+
 import datetime
 import pytz
 import pandas                    as pd
